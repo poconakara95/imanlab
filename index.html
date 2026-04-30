@@ -1416,7 +1416,7 @@
   function send(text) {
     if (!text.trim()) return;
     addMsg(text, "user"); inp.value = ""; showTyping();
-    fetch("/.netlify/functions/chat", {
+    fetch("https://imanai-chat.poconakara95.workers.dev", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({message: text})
