@@ -33,7 +33,7 @@ exports.handler = async function(event) {
     });
 
     const parsed = JSON.parse(result);
-    const reply = parsed.candidates[0].content.parts[0].text;
+   const reply = parsed.candidates?.[0]?.content?.parts?.[0]?.text || JSON.stringify(parsed);
     
     return {
       statusCode: 200,
