@@ -5,36 +5,47 @@ exports.handler = async function(event) {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
-  const { message } = JSON.parse(event.body);
-  const apiKey = process.env.GEMINI_API_KEY;
-  const prompt = `Kau adalah Iman AI, virtual assistant untuk ImanLab - platform kelas offensive security di Malaysia. Jawab ringkas dan mesra.\n\nUser: ${message}`;
-
-  const postData = JSON.stringify({
-    contents: [{ parts: [{ text: prompt }] }],
-    generationConfig: { maxOutputTokens: 500 }
-  });
-
-  return new Promise((resolve) => {
-    const req = https.request({
-      hostname: 'generativelanguage.googleapis.com',
-      path: `/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(postData) }
-    }, (res) => {
-      let data = '';
-      res.on('data', chunk => data += chunk);
-      res.on('end', () => {
-        try {
-          const parsed = JSON.parse(data);
-          const reply = parsed.candidates?.[0]?.content?.parts?.[0]?.text || 'Maaf, cuba lagi.';
-          resolve({ statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ reply }) });
-        } catch(e) {
-          resolve({ statusCode: 200, body: JSON.stringify({ reply: 'Maaf, ada masalah teknikal.' }) });
-        }
-      });
+  try {
+    const { message } = JSON.parse(event.body);
+    const apiKey = process.env.GEMINI_API_KEY;
+    
+    const postData = JSON.stringify({
+      contents: [{ parts: [{ text: "Kau adalah Iman AI, assistant untuk ImanLab - platform kelas cybersecurity Malaysia. Jawab ringkas dan mesra.\n\nUser: " + message }] }]
     });
-    req.on('error', () => resolve({ statusCode: 500, body: JSON.stringify({ reply: 'Maaf, ada masalah teknikal.' }) }));
-    req.write(postData);
-    req.end();
-  });
+
+    const result = await new Promise((resolve, reject) => {
+      const req = https.request({
+        hostname: 'generativelanguage.googleapis.com',
+        path: '/v1beta/models/gemini-1.5-flash-latest:generateContent?key=' + apiKey,
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(postData)
+        }
+      }, (res) => {
+        let data = '';
+        res.on('data', chunk => { data += chunk; });
+        res.on('end', () => { resolve(data); });
+      });
+      req.on('error', reject);
+      req.write(postData);
+      req.end();
+    });
+
+    const parsed = JSON.parse(result);
+    const reply = parsed.candidates[0].content.parts[0].text;
+    
+    return {
+      statusCode: 200,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reply: reply })
+    };
+
+  } catch(e) {
+    return {
+      statusCode: 200,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reply: 'Error: ' + e.message })
+    };
+  }
 };
