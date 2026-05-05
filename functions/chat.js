@@ -1,8 +1,21 @@
+const ALLOWED_ORIGINS = ['https://imanlab.asia', 'https://imanlab.pages.dev', 'https://www.imanlab.asia'];
+const MAX_MESSAGE_LENGTH = 500;
+
 export async function onRequestPost(context) {
   const { request, env } = context;
 
+  const origin = request.headers.get('Origin') || '';
+  const corsHeader = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+
   try {
-    const { message } = await request.json();
+    const body = await request.json();
+    const message = (body.message || '').toString().trim().slice(0, MAX_MESSAGE_LENGTH);
+    if (!message) {
+      return new Response(JSON.stringify({ reply: 'Mesej kosong.' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': corsHeader }
+      });
+    }
     const apiKey = env.GROQ_API_KEY;
 
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -51,7 +64,7 @@ Cara kau reply:
     return new Response(JSON.stringify({ reply }), {
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
+        'Access-Control-Allow-Origin': corsHeader
       }
     });
   } catch (e) {
@@ -59,16 +72,18 @@ Cara kau reply:
       status: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
+        'Access-Control-Allow-Origin': corsHeader
       }
     });
   }
 }
 
-export async function onRequestOptions() {
+export async function onRequestOptions(context) {
+  const origin = context.request.headers.get('Origin') || '';
+  const corsHeader = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   return new Response(null, {
     headers: {
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin': corsHeader,
       'Access-Control-Allow-Methods': 'POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type'
     }
