@@ -477,70 +477,87 @@
   .modules-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
+    gap: 16px;
+    background: transparent;
+    border: none;
+    counter-reset: module-counter;
   }
 
   .module-card {
     background: var(--bg2);
-    padding: 32px 28px;
+    padding: 36px 32px;
     position: relative;
-    transition: all 0.25s;
+    transition: all 0.3s ease;
     overflow: hidden;
+    border: 1px solid var(--border);
+    counter-increment: module-counter;
   }
 
   .module-card::before {
     content: '';
     position: absolute;
     top: 0; left: 0;
-    width: 3px; height: 0;
+    width: 0; height: 2px;
     background: var(--red);
-    transition: height 0.3s;
+    transition: width 0.35s ease;
   }
 
-  .module-card:hover::before { height: 100%; }
-  .module-card:hover { background: var(--panel); }
+  .module-card::after {
+    content: counter(module-counter, decimal-leading-zero);
+    position: absolute;
+    right: 16px;
+    bottom: -12px;
+    font-family: 'Orbitron', monospace;
+    font-size: 5.5rem;
+    font-weight: 900;
+    color: rgba(255,32,32,0.04);
+    pointer-events: none;
+    line-height: 1;
+  }
+
+  .module-card:hover::before { width: 100%; }
+  .module-card:hover {
+    background: var(--panel);
+    border-color: rgba(255,32,32,0.2);
+    transform: translateY(-3px);
+  }
 
   .module-num {
-    font-family: 'Orbitron', monospace;
-    font-size: 0.65rem;
-    color: rgba(255,32,32,0.4);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.68rem;
+    color: rgba(255,32,32,0.45);
     letter-spacing: 3px;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
   }
 
-  .module-icon {
-    font-size: 1.8rem;
-    margin-bottom: 14px;
-    display: block;
-  }
+  .module-icon { display: none; }
 
   .module-title {
     font-family: 'Rajdhani', sans-serif;
     font-weight: 700;
-    font-size: 1.05rem;
+    font-size: 1.08rem;
     color: var(--white);
-    margin-bottom: 10px;
-    letter-spacing: 1px;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
+    line-height: 1.3;
   }
 
   .module-desc {
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     color: var(--text-dim);
-    line-height: 1.6;
+    line-height: 1.7;
   }
 
   .module-tag {
     display: inline-block;
-    margin-top: 14px;
+    margin-top: 20px;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     letter-spacing: 2px;
-    color: var(--red);
+    color: rgba(255,32,32,0.6);
     padding: 3px 10px;
-    border: 1px solid rgba(255,32,32,0.25);
+    border: 1px solid rgba(255,32,32,0.15);
   }
 
   /* BENEFITS */
