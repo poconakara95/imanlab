@@ -59,7 +59,7 @@ Cara kau reply:
     });
 
     const data = await response.json();
-    const reply = data.choices?.[0]?.message?.content || JSON.stringify(data);
+    const reply = data.choices?.[0]?.message?.content || 'Maaf, cuba lagi.';
 
     return new Response(JSON.stringify({ reply }), {
       headers: {
