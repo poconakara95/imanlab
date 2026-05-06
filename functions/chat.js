@@ -69,7 +69,7 @@ Cara kau reply:
     });
   } catch (e) {
     return new Response(JSON.stringify({ reply: 'Maaf, ada masalah teknikal.' }), {
-      status: 200,
+      status: 500,
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': corsHeader

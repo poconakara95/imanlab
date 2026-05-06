@@ -1,0 +1,17 @@
+# Claude Code local settings (may contain secrets)
+.claude/settings.local.json
+
+# Wrangler cache (contains account info)
+.wrangler/
+
+# Environment files
+.env
+.env.*
+*.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
