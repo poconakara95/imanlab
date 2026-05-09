@@ -1,3 +1,4 @@
 Contact: mailto:muhdiman495@gmail.com
 Expires: 2027-01-01T00:00:00.000Z
+Canonical: https://imanlab.asia/.well-known/security.txt
 Preferred-Languages: ms, en

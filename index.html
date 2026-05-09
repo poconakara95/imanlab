@@ -887,6 +887,7 @@
     transform: translateY(0);
   }
 </style>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
 
@@ -1358,11 +1359,28 @@
   sendBtn.id = "imanai-send"; sendBtn.textContent = ">";
   inpArea.appendChild(inp); inpArea.appendChild(sendBtn);
 
-  box.appendChild(hdr); box.appendChild(msgsDiv); box.appendChild(inpArea);
+  var tsDiv = document.createElement("div");
+  tsDiv.id = "imanai-ts";
+  box.appendChild(hdr); box.appendChild(msgsDiv); box.appendChild(tsDiv); box.appendChild(inpArea);
   document.body.appendChild(btn);
   document.body.appendChild(box);
 
   var isOpen = false;
+  var tsToken = null;
+  var tsWidgetId = null;
+
+  function initTurnstile() {
+    if (window.turnstile && !tsWidgetId) {
+      tsWidgetId = window.turnstile.render(document.getElementById('imanai-ts'), {
+        sitekey: '0x4AAAAAADMDRc1K7hI01J9r',
+        theme: 'dark',
+        size: 'invisible',
+        callback: function(token) { tsToken = token; },
+        'expired-callback': function() { tsToken = null; if (tsWidgetId) window.turnstile.reset(tsWidgetId); },
+        'error-callback': function() { tsToken = null; }
+      });
+    }
+  }
 
   function addMsg(text, sender) {
     var m = document.createElement("div");
@@ -1383,13 +1401,19 @@
 
   function send(text) {
     if (!text.trim()) return;
+    var token = tsToken;
+    tsToken = null;
     addMsg(text, "user"); inp.value = ""; showTyping();
     fetch("/chat", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({message: text})
+      body: JSON.stringify({message: text, ts_token: token || ''})
     }).then(function(res){ return res.json(); })
-    .then(function(data){ removeTyping(); addMsg(data.reply || "Maaf, cuba lagi.", "bot"); })
+    .then(function(data){
+      removeTyping();
+      addMsg(data.reply || "Maaf, cuba lagi.", "bot");
+      if (window.turnstile && tsWidgetId) window.turnstile.reset(tsWidgetId);
+    })
     .catch(function(){ removeTyping(); addMsg("Maaf, ada masalah teknikal.", "bot"); });
   }
 
@@ -1399,6 +1423,7 @@
       box.classList.add("open");
       if (!msgsDiv.children.length) addMsg(WELCOME, "bot");
       inp.focus();
+      initTurnstile();
     } else { box.classList.remove("open"); }
   });
 

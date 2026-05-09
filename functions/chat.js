@@ -16,6 +16,28 @@ export async function onRequestPost(context) {
         headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': corsHeader }
       });
     }
+
+    const tsSecret = env.TURNSTILE_SECRET_KEY;
+    if (tsSecret) {
+      const tsToken = (body.ts_token || '').toString();
+      const verifyResp = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          secret: tsSecret,
+          response: tsToken,
+          remoteip: request.headers.get('CF-Connecting-IP') || ''
+        })
+      });
+      const verifyData = await verifyResp.json();
+      if (!verifyData.success) {
+        return new Response(JSON.stringify({ reply: 'Security check gagal. Sila muat semula halaman dan cuba lagi.' }), {
+          status: 403,
+          headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': corsHeader }
+        });
+      }
+    }
+
     const apiKey = env.GROQ_API_KEY;
 
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
