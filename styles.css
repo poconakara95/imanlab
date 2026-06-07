@@ -855,16 +855,113 @@
   }
 
   /* RESPONSIVE */
-  @media (max-width: 900px) {
-    nav { padding: 16px 24px; }
+
+  /* iPad landscape + small desktop (max 1024px) */
+  @media (max-width: 1024px) {
+    nav { padding: 16px 32px; }
+    section { padding: 80px 40px; }
+    #cta { padding: 80px 40px; }
+    .hero-corner.tl { left: 32px; }
+    .hero-corner.tr { right: 32px; }
+    .about-skills { grid-template-columns: 1fr 1fr; }
+    .modules-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+    .benefits-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* iPad portrait + large phones (max 768px) */
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
     .nav-links { display: none; }
-    section { padding: 70px 24px; }
-    #about { grid-template-columns: 1fr; gap: 40px; }
-    .benefits-grid { grid-template-columns: 1fr; }
-    footer { flex-direction: column; text-align: center; padding: 30px 24px; }
+    .nav-logo { font-size: 1.1rem; }
+    .nav-cta { padding: 8px 16px; font-size: 0.72rem; letter-spacing: 1px; }
+
+    #hero { padding: 100px 24px 60px; }
     .hero-corner { display: none; }
-    .hero-stats { gap: 30px; }
-    .pricing-card.featured { transform: scale(1); }
+    .hero-title { letter-spacing: -1px; }
+    .hero-desc { font-size: 1rem; margin-bottom: 36px; }
+    .hero-btns { gap: 12px; }
+    .btn-primary, .btn-secondary { padding: 14px 32px; font-size: 0.82rem; }
+    .hero-stats { gap: 24px; margin-top: 50px; }
+    .stat-num { font-size: 1.8rem; }
+
+    section { padding: 60px 24px; }
+    #cta { padding: 70px 24px; }
+    .section-title { font-size: clamp(1.8rem, 6vw, 2.8rem); }
+    .section-desc { font-size: 1rem; margin-bottom: 40px; }
+
+    #about { grid-template-columns: 1fr; gap: 40px; }
+    .about-badge { right: 0; bottom: 16px; }
+    .about-skills { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .skill-tag { font-size: 0.7rem; padding: 8px 12px; }
+
+    .modules-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+    .module-card { padding: 24px 20px; }
+
+    .benefits-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+    .benefit-card { padding: 24px 20px; }
+
+    .target-grid { grid-template-columns: 1fr; max-width: 480px; gap: 16px; }
+    .target-card { padding: 28px 24px; }
+
+    .cta-border { inset: 20px; }
+    .whatsapp-btn { padding: 14px 32px; font-size: 0.8rem; letter-spacing: 2px; }
+
+    footer { flex-direction: column; text-align: center; padding: 28px 20px; gap: 12px; }
+    .footer-copy { font-size: 0.66rem; }
+  }
+
+  /* Phones (max 480px) */
+  @media (max-width: 480px) {
+    nav { padding: 12px 16px; }
+    .nav-logo { font-size: 1rem; letter-spacing: 1px; }
+    .nav-cta { padding: 7px 12px; font-size: 0.68rem; clip-path: none; border-radius: 4px; }
+
+    #hero { padding: 90px 16px 50px; }
+    .hero-badge { font-size: 0.65rem; letter-spacing: 2px; padding: 5px 14px; }
+    .hero-subtitle { font-size: 0.85rem; letter-spacing: 1px; }
+    .hero-desc { font-size: 0.95rem; }
+    .hero-btns { flex-direction: column; align-items: center; gap: 10px; }
+    .btn-primary, .btn-secondary { width: 100%; max-width: 280px; text-align: center; padding: 14px 24px; clip-path: none; border-radius: 4px; }
+    .hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; }
+    .stat-num { font-size: 1.5rem; }
+    .stat-label { font-size: 0.62rem; letter-spacing: 1px; }
+
+    section { padding: 50px 16px; }
+    #cta { padding: 60px 16px; }
+    .section-title { font-size: clamp(1.5rem, 7vw, 2.2rem); }
+    .section-label { font-size: 0.65rem; letter-spacing: 3px; }
+    .section-desc { font-size: 0.9rem; margin-bottom: 30px; }
+
+    #about { gap: 30px; }
+    .about-badge { right: 0; bottom: 8px; padding: 8px 14px; }
+    .about-badge-num { font-size: 1.4rem; }
+    .about-badge-text { font-size: 0.55rem; }
+    .about-skills { grid-template-columns: 1fr; gap: 8px; }
+    .skill-tag { font-size: 0.72rem; padding: 9px 12px; }
+
+    .modules-grid { grid-template-columns: 1fr; gap: 10px; }
+    .module-card { padding: 22px 18px; }
+    .module-title { font-size: 1rem; }
+
+    .benefits-grid { grid-template-columns: 1fr; gap: 12px; }
+    .benefit-card { padding: 22px 18px; clip-path: none; border-radius: 4px; }
+    .benefit-title { font-size: 0.9rem; }
+    .benefit-desc { font-size: 0.85rem; }
+
+    .target-grid { grid-template-columns: 1fr; gap: 12px; }
+    .target-card { padding: 24px 18px; }
+
+    .cta-border { display: none; }
+    .cta-text { font-size: clamp(1.6rem, 8vw, 2.5rem); }
+    .cta-sub { font-size: 0.9rem; letter-spacing: 1px; }
+    .whatsapp-btn { width: 100%; max-width: 300px; justify-content: center; padding: 14px 20px; clip-path: none; border-radius: 4px; font-size: 0.78rem; letter-spacing: 1px; }
+
+    footer { padding: 24px 16px; }
+    .footer-logo { font-size: 1rem; }
+
+    #imanai-box { right: 10px; left: 10px; width: auto; bottom: 130px; }
+    #imanai-btn { right: 12px; width: 80px; }
+    #imanai-btn-img { width: 80px; }
   }
 
   /* SCROLL REVEAL */
