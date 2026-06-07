@@ -14,7 +14,7 @@
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
 
   body {
     font-family: 'Rajdhani', sans-serif;
@@ -171,21 +171,23 @@
   .hero-title {
     font-family: 'Orbitron', monospace;
     font-weight: 900;
-    font-size: clamp(3rem, 8vw, 7rem);
+    font-size: clamp(2rem, 7vw, 7rem);
     line-height: 0.95;
     color: var(--white);
     margin-bottom: 16px;
     letter-spacing: -2px;
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
 
   .hero-title .accent { color: var(--red); display: block; }
 
   .hero-subtitle {
     font-family: 'Share Tech Mono', monospace;
-    font-size: clamp(1rem, 2vw, 1.3rem);
+    font-size: clamp(0.75rem, 2.5vw, 1.3rem);
     color: var(--text-dim);
     margin-bottom: 16px;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
   }
 
   .hero-desc {
