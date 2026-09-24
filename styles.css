@@ -796,14 +796,22 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
 }
 .card-media .photo {
   opacity: 0;
+  filter: blur(16px);
+  transform: scale(1.06);
   animation: photo-fallback 0.01s linear 8s forwards;
 }
-.card-media .photo.is-loaded {
+/* Sharpens in when the photo has loaded AND its card has scrolled into view (.is-in from the reveal) */
+.is-in .card-media .photo.is-loaded {
   opacity: 1;
+  filter: none;
+  transform: none;
   animation: none;
-  transition: opacity 0.8s ease, transform 0.9s var(--ease-out);
+  transition:
+    opacity 0.7s ease calc(var(--delay, 0ms) + 150ms),
+    filter 1.1s ease calc(var(--delay, 0ms) + 150ms),
+    transform 1.3s var(--ease-out) calc(var(--delay, 0ms) + 150ms);
 }
-@keyframes photo-fallback { to { opacity: 1; } }
+@keyframes photo-fallback { to { opacity: 1; filter: none; transform: none; } }
 
 .card-media[data-service="anti-curang"]       { --hue: 300; --hue2: 262; }
 .card-media[data-service="renang"]            { --hue: 194; --hue2: 222; }
@@ -1116,6 +1124,7 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
   }
   .card:hover .card-media img { transform: scale(1.04); }
   .card:hover .card-media .lqip { transform: scale(1.12); }
+  .card:hover .card-media .photo.is-loaded { transform: scale(1.04); transition: transform 0.9s var(--ease-out); }
   .btn:hover {
     transform: translate3d(0, -2px, 0);
     box-shadow:
@@ -1475,6 +1484,7 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
     transition: none !important;
   }
   .card-inner, .btn, .card-media img { transition: none !important; }
+  .card-media .photo { filter: none; transform: none; }
   .card-media .photo.is-loaded { transition: none !important; }
   .install { transition: none !important; }
 }
