@@ -1342,8 +1342,8 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
 }
 .install-icon { flex: none; width: 56px; height: 56px; border-radius: 14px; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18); }
 .install-title { font-size: 1rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.3; }
-.install-text, .install-ios { margin-top: 4px; font-size: 0.95rem; font-weight: 500; line-height: 1.5; color: #f0f1ff; }
-.install-ios svg { display: inline-block; width: 18px; height: 18px; margin: 0 2px; vertical-align: -3px; }
+.install-text, .install-steps { margin-top: 4px; font-size: 0.95rem; font-weight: 500; line-height: 1.5; color: #f0f1ff; }
+.install-steps svg { display: inline-block; width: 18px; height: 18px; margin: 0 2px; vertical-align: -3px; }
 .install-actions { display: flex; gap: 10px; margin-top: 12px; }
 .install-yes, .install-no {
   min-height: 44px;

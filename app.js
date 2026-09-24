@@ -291,7 +291,9 @@
     img.addEventListener('error', done, { once: true });
   });
 
-  /* ---------- 6. Install popup: Android/desktop get a real "Pasang" button, iOS gets Add to Home Screen steps ---------- */
+  /* ---------- 6. Install popup ----------
+     Always offers install on phones: a one-tap "Pasang" when the browser allows it (beforeinstallprompt,
+     which Chrome only fires after some engagement), otherwise short steps for that browser. */
   (function () {
     var box = document.getElementById('install');
     if (!box) return;
@@ -304,14 +306,30 @@
     function snooze() { try { localStorage.setItem(KEY, String(Date.now())); } catch (e) {} }
     if (snoozed()) return;
 
+    var ua = navigator.userAgent || '';
+    if (/FBAN|FBAV|Instagram|Line\/|TikTok|musical_ly|WhatsApp|Snapchat/i.test(ua)) return;
+    var isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    var isAndroid = /Android/.test(ua);
+    var isFirefox = /Firefox|FxiOS/.test(ua);
+    var isChromium = /Chrome|Chromium|Edg\//.test(ua) && !isFirefox;
+    var isMacSafari = !isIOS && /Macintosh/.test(ua) && /Version\/\d+.*Safari/.test(ua) && !isChromium;
+    var os = isIOS ? 'ios' : isAndroid ? (isFirefox ? '' : 'android') : isChromium ? 'desktop' : isMacSafari ? 'mac-safari' : '';
+
     var yes = document.getElementById('install-yes');
     var no = document.getElementById('install-no');
-    var ios = document.getElementById('install-ios');
-    var deferred = null, timer = 0, shown = false;
+    var steps = box.querySelectorAll('.install-steps');
+    var deferred = null, shown = false, timer = 0;
 
+    function render() {
+      var oneTap = !!deferred;
+      yes.hidden = !oneTap;
+      no.textContent = oneTap ? 'Nanti' : 'Faham';
+      Array.prototype.forEach.call(steps, function (p) { p.hidden = oneTap || p.getAttribute('data-os') !== os; });
+    }
     function open() {
-      if (shown) return;
+      if (shown || (!deferred && !os)) return;
       shown = true;
+      render();
       box.hidden = false;
       window.requestAnimationFrame(function () { window.requestAnimationFrame(function () { box.classList.add('is-open'); }); });
     }
@@ -320,20 +338,14 @@
       box.classList.remove('is-open');
       window.setTimeout(function () { box.hidden = true; }, 450);
     }
-    function openSoon() { if (!timer) timer = window.setTimeout(open, 6000); }
 
-    window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; openSoon(); });
+    window.addEventListener('beforeinstallprompt', function (e) {
+      e.preventDefault();
+      deferred = e;
+      if (shown) render(); else { window.clearTimeout(timer); timer = window.setTimeout(open, 1500); }
+    });
     window.addEventListener('appinstalled', function () { snooze(); close(false); });
-
-    var ua = navigator.userAgent || '';
-    var isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    var inApp = /FBAN|FBAV|Instagram|Line\/|TikTok|musical_ly|WhatsApp/i.test(ua);
-    if (isIOS && !inApp) {
-      yes.hidden = true;
-      ios.hidden = false;
-      no.textContent = 'Faham';
-      openSoon();
-    }
+    if (os) timer = window.setTimeout(open, 5000);
 
     yes.addEventListener('click', function () {
       if (!deferred) { close(true); return; }
