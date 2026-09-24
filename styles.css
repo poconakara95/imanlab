@@ -787,6 +787,24 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
 }
 .card-media:has(img) .ph { display: none; }
 
+/* Photo loading: tiny blurred preview first, then the sharp photo fades in (app.js adds .is-loaded).
+   Without JS the <noscript> rule shows photos; if JS fails, the fallback animation shows them after 8s. */
+.card-media .lqip {
+  z-index: 2;
+  filter: blur(14px);
+  transform: scale(1.12);
+}
+.card-media .photo {
+  opacity: 0;
+  animation: photo-fallback 0.01s linear 8s forwards;
+}
+.card-media .photo.is-loaded {
+  opacity: 1;
+  animation: none;
+  transition: opacity 0.8s ease, transform 0.9s var(--ease-out);
+}
+@keyframes photo-fallback { to { opacity: 1; } }
+
 .card-media[data-service="anti-curang"]       { --hue: 300; --hue2: 262; }
 .card-media[data-service="renang"]            { --hue: 194; --hue2: 222; }
 .card-media[data-service="mengaji"]           { --hue: 156; --hue2: 186; }
@@ -1097,6 +1115,7 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
       inset 0 1px 0 rgba(255, 255, 255, 0.12);
   }
   .card:hover .card-media img { transform: scale(1.04); }
+  .card:hover .card-media .lqip { transform: scale(1.12); }
   .btn:hover {
     transform: translate3d(0, -2px, 0);
     box-shadow:
@@ -1398,6 +1417,7 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
     transition: none !important;
   }
   .card-inner, .btn, .card-media img { transition: none !important; }
+  .card-media .photo.is-loaded { transition: none !important; }
 }
 
 /* ---------- Print ---------- */

@@ -282,4 +282,12 @@
   }
 
   initPointerFX();
+
+  /* ---------- 5. Photos: fade in over the blurred preview once loaded ---------- */
+  Array.prototype.forEach.call(document.querySelectorAll('.card-media .photo'), function (img) {
+    function done() { img.classList.add('is-loaded'); }
+    if (img.complete && img.naturalWidth) { done(); return; }
+    img.addEventListener('load', done, { once: true });
+    img.addEventListener('error', done, { once: true });
+  });
 })();
