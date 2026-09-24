@@ -10,8 +10,9 @@ if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
   export CLOUDFLARE_API_TOKEN
 fi
 OUT="$(mktemp -d)"
-cp index.html styles.css app.js favicon.svg og-image.jpg _headers robots.txt sitemap.xml "$OUT"/
+cp index.html 404.html styles.css app.js favicon.svg og-image.jpg manifest.webmanifest _headers robots.txt sitemap.xml "$OUT"/
 cp -R .well-known "$OUT"/
+cp -R fonts icons "$OUT"/
 if [ -d images ]; then cp -R images "$OUT"/; fi
 wrangler pages deploy "$OUT" --project-name imanlab --branch main
 rm -rf "$OUT"

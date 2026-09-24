@@ -3,6 +3,72 @@
    Plain CSS, no build step. Animations use transform/opacity.
    ========================================================= */
 
+/* ---------- Fonts (self-hosted, latin subset, SIL OFL 1.1; see fonts/README.txt) ---------- */
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/instrument-serif-italic-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/jetbrains-mono-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/jetbrains-mono-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Sora";
+  font-style: normal;
+  font-weight: 200;
+  font-display: swap;
+  src: url("fonts/sora-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Sora";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/sora-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Sora";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/sora-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Sora";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/sora-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Sora";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("fonts/sora-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 :root {
   --bg: #05061a;
   --bg-2: #0b0d31;
@@ -1228,6 +1294,38 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
   .ph-tag--bottom { bottom: 24px; }
   .ph-corners { inset: 12px; }
 }
+
+/* ---------- 404 page ---------- */
+.nf .hero-inner { display: flex; flex-direction: column; align-items: center; }
+.nf-code {
+  font-size: clamp(5rem, 26cqi, 11rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: transparent;
+  background-image: var(--iri-a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.nf-title {
+  margin-top: 18px;
+  font-size: clamp(1.1rem, 0.9rem + 1vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.nf-text {
+  max-width: 34ch;
+  margin: 14px auto 0;
+  font-size: clamp(1.02rem, 0.96rem + 0.2vw, 1.12rem);
+  font-weight: 500;
+  line-height: 1.6;
+  color: #f7f8ff;
+  text-wrap: balance;
+}
+.nf .btn { display: inline-flex; margin-top: 30px; min-width: 240px; }
+.nf .scroll-cue { margin-top: 14px; }
 
 /* ---------- Phones: two boxes per row ---------- */
 @media (min-width: 360px) and (max-width: 639px) {
