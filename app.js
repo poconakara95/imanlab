@@ -290,4 +290,57 @@
     img.addEventListener('load', done, { once: true });
     img.addEventListener('error', done, { once: true });
   });
+
+  /* ---------- 6. Install popup: Android/desktop get a real "Pasang" button, iOS gets Add to Home Screen steps ---------- */
+  (function () {
+    var box = document.getElementById('install');
+    if (!box) return;
+    var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+    if (standalone) return;
+    var KEY = 'sbi-install-snooze', DAYS = 14;
+    function snoozed() {
+      try { var t = Number(localStorage.getItem(KEY)); return t > 0 && Date.now() - t < DAYS * 864e5; } catch (e) { return false; }
+    }
+    function snooze() { try { localStorage.setItem(KEY, String(Date.now())); } catch (e) {} }
+    if (snoozed()) return;
+
+    var yes = document.getElementById('install-yes');
+    var no = document.getElementById('install-no');
+    var ios = document.getElementById('install-ios');
+    var deferred = null, timer = 0, shown = false;
+
+    function open() {
+      if (shown) return;
+      shown = true;
+      box.hidden = false;
+      window.requestAnimationFrame(function () { window.requestAnimationFrame(function () { box.classList.add('is-open'); }); });
+    }
+    function close(remember) {
+      if (remember) snooze();
+      box.classList.remove('is-open');
+      window.setTimeout(function () { box.hidden = true; }, 450);
+    }
+    function openSoon() { if (!timer) timer = window.setTimeout(open, 6000); }
+
+    window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; openSoon(); });
+    window.addEventListener('appinstalled', function () { snooze(); close(false); });
+
+    var ua = navigator.userAgent || '';
+    var isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    var inApp = /FBAN|FBAV|Instagram|Line\/|TikTok|musical_ly|WhatsApp/i.test(ua);
+    if (isIOS && !inApp) {
+      yes.hidden = true;
+      ios.hidden = false;
+      no.textContent = 'Faham';
+      openSoon();
+    }
+
+    yes.addEventListener('click', function () {
+      if (!deferred) { close(true); return; }
+      deferred.prompt();
+      deferred.userChoice.then(function () { deferred = null; close(true); }, function () { close(true); });
+    });
+    no.addEventListener('click', function () { close(true); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && shown && !box.hidden) close(true); });
+  })();
 })();
