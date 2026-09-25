@@ -15,3 +15,6 @@ Thumbs.db
 
 # Node
 node_modules/
+
+# Local project notes — keep private, never push
+CLAUDE.md
